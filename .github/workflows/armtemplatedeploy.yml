@@ -32,5 +32,5 @@ jobs:
           scope: subscription
           subscriptiond: 7164c982-3166-4a24-9be8-625f5e01c65b
           region: Australia East
-          template: ./arm-template/resourcegroup.json
+          template: ./arm-templates/resourcegroup.json
           deploymentName: rg-githubactions
