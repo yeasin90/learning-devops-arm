@@ -9,6 +9,10 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  resource_group_name: rg-githubactions
+  location: 'Australia East'
+  subscriptionId: 7164c982-3166-4a24-9be8-625f5e01c65b
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -26,26 +30,35 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy Resource Group rg-githubactions
+      - name: Deploy Resource Group ${{ env.resource_group_name }}
         uses: Azure/arm-deploy@v1
         with:
           scope: subscription
-          subscriptiond: 7164c982-3166-4a24-9be8-625f5e01c65b
-          region: Australia East
+          subscriptiond: ${{ env.subscriptionId }}
+          region: ${{ env.location }}
           template: ./arm-templates/resourcegroup.json
-          deploymentName: rg-githubactions
+          deploymentName: ${{ env.resource_group_name }}
 
       - name: Deploy Storage Account
         uses: Azure/arm-deploy@v1
         id: storageAccountDeploy
         with:
           scope: resourcegroup
-          resourceGroupName: rg-githubactions
-          subscriptiond: 7164c982-3166-4a24-9be8-625f5e01c65b
+          resourceGroupName: ${{ env.resource_group_name }}
+          subscriptiond: ${{ env.subscriptionId }}
           template: ./arm-templates/storageaccount.json
           parameters: ./arm-templates/storageaccount.parameters.json
             storageAccountName=globostg002
-            location="Australia East"
+            location=${{ env.location }}
           deploymentMode: incremental
 
-      - run: echo ${{ steps.storageAccountDeploy.outputs.BlobUri }}
+      - name: Deploy Virtual machine
+        uses: Azure/arm-deploy@v1
+        with:
+          scope: resourcegroup
+          resourceGroupName: ${{ env.resource_group_name }}
+          subscriptiond: ${{ env.subscriptionId }}
+          template: ./arm-templates/virtualmachine.json
+          parameters: adminPassword={{ secrets.UBUNTU_ADMIN_PASSWORD }}
+            location=${{ env.location }}
+          deploymentMode: incremental
