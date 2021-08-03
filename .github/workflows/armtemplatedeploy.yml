@@ -11,7 +11,7 @@ on:
 
 env:
   resource_group_name: rg-githubactions
-  location: 'Australia East'
+  location: Australia East
   subscriptionId: 7164c982-3166-4a24-9be8-625f5e01c65b
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -35,7 +35,7 @@ jobs:
         with:
           scope: subscription
           subscriptiond: ${{ env.subscriptionId }}
-          region: ${{ env.location }}
+          region: '${{ env.location }}'
           template: ./arm-templates/resourcegroup.json
           deploymentName: ${{ env.resource_group_name }}
 
@@ -49,7 +49,7 @@ jobs:
           template: ./arm-templates/storageaccount.json
           parameters: ./arm-templates/storageaccount.parameters.json
             storageAccountName=globostg002
-            location=${{ env.location }}
+            location="${{ env.location }}"
           deploymentMode: incremental
 
       - name: Deploy Virtual machine
@@ -60,5 +60,5 @@ jobs:
           subscriptiond: ${{ env.subscriptionId }}
           template: ./arm-templates/virtualmachine.json
           parameters: adminPassword={{ secrets.UBUNTU_ADMIN_PASSWORD }}
-            location=${{ env.location }}
+            location="${{ env.location }}"
           deploymentMode: incremental
