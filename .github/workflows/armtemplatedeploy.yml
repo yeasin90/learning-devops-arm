@@ -43,4 +43,6 @@ jobs:
           subscriptiond: 7164c982-3166-4a24-9be8-625f5e01c65b
           template: ./arm-templates/storageaccount.json
           parameters: ./arm-templates/storageaccount.parameters.json
+            storageAccountName=globostg002
+            location="Australia East"
           deploymentMode: incremental
