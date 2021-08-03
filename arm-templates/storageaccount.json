@@ -2,7 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "storageAccount": {
+    "storageAccountName": {
       "type": "string",
       "metadata": {
         "description": "Enter a name for the storage account"
@@ -25,11 +25,11 @@
   "variables": {},
   "resources": [
     {
-      "name": "[parameters('storageAccount')]",
+      "name": "[parameters('storageAccountName')]",
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2019-06-01",
       "tags": {
-        "displayName": "[parameters('storageAccount')]"
+        "displayName": "[parameters('storageAccountName')]"
       },
       "location": "[parameters('location')]",
       "kind": "StorageV2",
